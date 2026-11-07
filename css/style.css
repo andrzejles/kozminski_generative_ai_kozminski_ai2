@@ -1,0 +1,1056 @@
+/* ==========================================================================
+   Kozminski Escape: Polowanie na ECTS
+   Oficjalny arkusz stylów CSS (css/style.css)
+   Akademia Leona Koźmińskiego (ALK) w Warszawie
+   ========================================================================== */
+
+/* 1. Zmienne globalne i oficjalna paleta barw ALK */
+:root {
+  /* Oficjalne barwy ALK */
+  --alk-navy-main: #002244;       /* Główny granat ALK */
+  --alk-navy-dark: #0a1128;       /* Ciemny granat tła */
+  --alk-gold-accent: #f2a900;     /* Akcentowe złoto */
+  --alk-gold-light: #ffc740;      /* Jasne złoto */
+  --alk-blue-secondary: #004b87;  /* Kolor uzupełniający */
+
+  /* Kolory funkcjonalne i pomocnicze */
+  --color-danger: #e63946;
+  --color-danger-dark: #9b111e;
+  --color-patio-green: #10b981;
+  --color-white: #ffffff;
+  --color-text-muted: #8e9aaf;
+  
+  /* Typografia */
+  --font-display: 'Chakra Petch', sans-serif;
+  --font-retro: 'Press Start 2P', monospace;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+
+  /* Cienie i poświaty retro-arcade */
+  --shadow-gold-glow: 0 0 16px rgba(242, 169, 0, 0.45);
+  --shadow-gold-strong: 0 0 24px rgba(255, 199, 64, 0.65);
+  --shadow-hud-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.55);
+}
+
+/* Podstawowy reset i reguły box-sizing */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  width: 100%;
+  min-height: 100%;
+  background-color: var(--alk-navy-dark);
+  background-image: 
+    radial-gradient(circle at 50% 15%, rgba(0, 75, 135, 0.35) 0%, transparent 65%),
+    radial-gradient(circle at 85% 85%, rgba(242, 169, 0, 0.08) 0%, transparent 50%),
+    linear-gradient(180deg, #060b1b 0%, var(--alk-navy-dark) 50%, var(--alk-navy-main) 100%);
+  color: var(--color-white);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Główny kontener aplikacji */
+#game-app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 12px 16px 24px;
+}
+
+/* ==========================================================================
+   2. Nowoczesny wygląd retro-arcade: Szklany HUD z efektem blur i złotą ramką
+   ========================================================================== */
+.hud-container {
+  width: 100%;
+  max-width: 860px;
+  background: rgba(0, 34, 68, 0.72);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 2px solid var(--alk-gold-accent);
+  border-radius: 16px;
+  padding: 10px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  box-shadow: var(--shadow-hud-glass), var(--shadow-gold-glow);
+  margin-bottom: 12px;
+  position: relative;
+  z-index: 20;
+}
+
+/* Logo ALK i nagłówek gry */
+.hud-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.hud-logo-badge {
+  background: linear-gradient(135deg, var(--alk-gold-accent), var(--alk-gold-light));
+  color: var(--alk-navy-dark);
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 14px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  box-shadow: 0 0 12px rgba(242, 169, 0, 0.4);
+}
+
+.logo-lion {
+  font-size: 16px;
+}
+
+.hud-titles {
+  display: flex;
+  flex-direction: column;
+}
+
+.hud-game-title {
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--color-white);
+  line-height: 1.1;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.hud-sub {
+  font-size: 10.5px;
+  color: var(--alk-gold-light);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+}
+
+/* Grupa statystyk w HUD */
+.hud-stats-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  justify-content: center;
+}
+
+.hud-card {
+  background: rgba(10, 17, 40, 0.8);
+  border: 1px solid rgba(242, 169, 0, 0.3);
+  border-radius: 10px;
+  padding: 6px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 140px;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.hud-card-icon {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.hud-card-data {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.hud-label {
+  font-size: 8.5px;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  font-weight: 700;
+}
+
+/* Licznik punktów ECTS (Cel: 30) */
+.hud-ects-card {
+  position: relative;
+  overflow: hidden;
+  border-color: rgba(242, 169, 0, 0.5);
+}
+
+.hud-ects-counter {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 18px;
+  display: flex;
+  align-items: baseline;
+  gap: 3px;
+  color: var(--color-white);
+}
+
+.ects-current {
+  color: var(--alk-gold-light);
+  text-shadow: 0 0 10px rgba(255, 199, 64, 0.6);
+}
+
+.ects-divider {
+  color: var(--color-text-muted);
+  font-size: 14px;
+}
+
+.ects-goal {
+  color: var(--color-white);
+}
+
+.ects-unit {
+  font-size: 10px;
+  color: var(--color-text-muted);
+  margin-left: 2px;
+}
+
+.ects-progress-bar-wrap {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.ects-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--alk-gold-accent), #10b981);
+  transition: width 0.35s ease;
+}
+
+/* Pasek staminy z płynnym przejściem gradientowym */
+.hud-stamina-card {
+  min-width: 160px;
+}
+
+.stamina-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3px;
+}
+
+.stamina-text {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--alk-gold-light);
+}
+
+.stamina-bar-container {
+  width: 100%;
+  height: 9px;
+  background: rgba(6, 11, 27, 0.9);
+  border-radius: 5px;
+  overflow: hidden;
+  border: 1px solid rgba(242, 169, 0, 0.25);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+.stamina-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--alk-blue-secondary) 0%, #0077b6 50%, var(--alk-gold-light) 100%);
+  background-size: 200% 100%;
+  border-radius: 4px;
+  transition: width 0.1s linear, background 0.3s ease;
+  box-shadow: 0 0 8px rgba(0, 119, 182, 0.6);
+  animation: staminaGradientFlow 3s infinite linear;
+}
+
+@keyframes staminaGradientFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.stamina-fill.stamina-low {
+  background: linear-gradient(90deg, var(--color-danger-dark), var(--color-danger)) !important;
+  box-shadow: 0 0 12px rgba(230, 57, 70, 0.8) !important;
+  animation: pulseLowStamina 0.6s infinite alternate ease-in-out;
+}
+
+@keyframes pulseLowStamina {
+  from { opacity: 0.8; }
+  to { opacity: 1; }
+}
+
+/* Karta statusu kampusu */
+.hud-status-card {
+  min-width: 165px;
+}
+
+.status-location {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-white);
+  white-space: nowrap;
+}
+
+.status-alert {
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.status-alert.safe {
+  color: var(--color-patio-green);
+}
+
+.status-alert.danger {
+  color: #ff4d6d;
+  animation: alertFlicker 0.8s infinite alternate ease-in-out;
+}
+
+@keyframes alertFlicker {
+  from { opacity: 0.7; }
+  to { opacity: 1; text-shadow: 0 0 8px rgba(255, 77, 109, 0.8); }
+}
+
+/* Przyciski w HUD */
+.hud-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.hud-btn {
+  background: rgba(10, 17, 40, 0.85);
+  border: 1px solid var(--alk-gold-accent);
+  color: var(--color-white);
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  font-size: 16px;
+}
+
+.hud-btn:hover {
+  background: var(--alk-blue-secondary);
+  border-color: var(--alk-gold-light);
+  transform: translateY(-2px) scale(1.08);
+  box-shadow: var(--shadow-gold-glow);
+}
+
+.hud-btn:active {
+  transform: translateY(1px) scale(0.96);
+}
+
+/* ==========================================================================
+   3. Obszar gry: Canvas + Komiksowy dymek nad profesorem
+   ========================================================================== */
+.canvas-wrapper {
+  width: 100%;
+  max-width: 860px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+}
+
+.canvas-viewport {
+  position: relative;
+  width: 100%;
+  max-width: 800px;
+  aspect-ratio: 800 / 540;
+  background: #020713;
+  border: 3px solid var(--alk-gold-accent);
+  border-radius: 14px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.7), var(--shadow-gold-glow);
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#gameCanvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  background-color: var(--alk-navy-dark);
+}
+
+/* Komiksowy dymek nad profesorem z animacją wyskakiwania i trójkątnym wskaźnikiem */
+.speech-bubble {
+  position: relative;
+  width: 100%;
+  max-width: 800px;
+  background: #ffffff;
+  color: var(--alk-navy-dark);
+  border: 3px solid var(--alk-navy-main);
+  border-radius: 16px;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45), 0 0 0 2px var(--alk-gold-accent);
+  transform-origin: top center;
+  animation: bubblePop 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Trójkątny wskaźnik komiksowy skierowany w stronę canvasu / profesora */
+.speech-bubble::before {
+  content: '';
+  position: absolute;
+  top: -14px;
+  left: 60px;
+  width: 0;
+  height: 0;
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  border-bottom: 14px solid var(--alk-navy-main);
+}
+
+.speech-bubble::after {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: 62px;
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 12px solid #ffffff;
+}
+
+/* Animacja wyskakiwania komiksowego dymka */
+@keyframes bubblePop {
+  0% {
+    opacity: 0;
+    transform: scale(0.85) translateY(10px);
+  }
+  70% {
+    transform: scale(1.03) translateY(-2px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.speech-bubble.bubble-alert {
+  border-color: var(--color-danger);
+  animation: bubbleShake 0.4s ease-in-out;
+}
+
+@keyframes bubbleShake {
+  0%, 100% { transform: translateX(0) scale(1); }
+  25% { transform: translateX(-4px) scale(1.02); }
+  75% { transform: translateX(4px) scale(1.02); }
+}
+
+.bubble-avatar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.avatar-head {
+  font-size: 28px;
+  line-height: 1;
+}
+
+.avatar-badge {
+  font-size: 8px;
+  font-weight: 800;
+  background: var(--alk-navy-main);
+  color: var(--alk-gold-light);
+  padding: 2px 5px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+}
+
+.bubble-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.bubble-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 2px;
+}
+
+.bubble-name {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--alk-navy-main);
+  letter-spacing: 0.3px;
+}
+
+.bubble-status {
+  font-size: 10px;
+  color: var(--alk-blue-secondary);
+  font-weight: 600;
+}
+
+.bubble-quote {
+  font-size: 13.5px;
+  font-weight: 700;
+  font-style: italic;
+  color: #1e293b;
+  line-height: 1.35;
+}
+
+/* Nakładka pauzy */
+.game-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 17, 40, 0.88);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 30;
+}
+
+.overlay-card {
+  background: var(--alk-navy-main);
+  border: 2px solid var(--alk-gold-accent);
+  border-radius: 14px;
+  padding: 26px 36px;
+  text-align: center;
+  box-shadow: var(--shadow-hud-glass), var(--shadow-gold-glow);
+  max-width: 380px;
+}
+
+.overlay-card h2 {
+  font-family: var(--font-display);
+  font-size: 22px;
+  color: var(--alk-gold-light);
+  margin-bottom: 8px;
+}
+
+.overlay-card p {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  margin-bottom: 18px;
+}
+
+/* ==========================================================================
+   4. Złote przyciski z animacją powiększenia (hover scale)
+   ========================================================================== */
+.btn-primary, 
+.btn-gold,
+.btn-danger, 
+.btn-success {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 13px 26px;
+  border-radius: 10px;
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  cursor: pointer;
+  border: none;
+  text-transform: uppercase;
+  transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+              box-shadow 0.25s ease, 
+              background 0.25s ease;
+}
+
+/* Złoty przycisk główny ALK */
+.btn-primary, .btn-gold {
+  background: linear-gradient(135deg, var(--alk-gold-accent) 0%, var(--alk-gold-light) 50%, #d48f00 100%);
+  color: var(--alk-navy-dark);
+  border: 1px solid #ffe885;
+  box-shadow: 0 4px 18px rgba(242, 169, 0, 0.45);
+}
+
+/* Animacja powiększenia (hover scale) */
+.btn-primary:hover, .btn-gold:hover {
+  transform: scale(1.05) translateY(-2px);
+  box-shadow: var(--shadow-gold-strong);
+  background: linear-gradient(135deg, var(--alk-gold-light) 0%, #ffdf79 50%, var(--alk-gold-accent) 100%);
+}
+
+.btn-primary:active, .btn-gold:active {
+  transform: scale(0.98) translateY(1px);
+}
+
+.btn-danger {
+  background: linear-gradient(135deg, var(--color-danger), var(--color-danger-dark));
+  color: var(--color-white);
+  border: 1px solid #ff8592;
+  box-shadow: 0 4px 18px rgba(230, 57, 70, 0.45);
+}
+
+.btn-danger:hover {
+  transform: scale(1.05) translateY(-2px);
+  box-shadow: 0 0 24px rgba(230, 57, 70, 0.7);
+}
+
+.btn-danger:active {
+  transform: scale(0.98) translateY(1px);
+}
+
+.btn-large {
+  width: 100%;
+  padding: 15px 28px;
+  font-size: 16px;
+}
+
+.btn-arrow {
+  font-size: 18px;
+  transition: transform 0.2s ease;
+}
+
+.btn-primary:hover .btn-arrow,
+.btn-danger:hover .btn-arrow {
+  transform: translateX(5px);
+}
+
+/* ==========================================================================
+   5. Ekrany modalne (Start, Kampania Wrześniowa, Zaliczony Semestr)
+   ========================================================================== */
+.modal-layer {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 16px;
+}
+
+.modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(6, 11, 27, 0.88);
+  backdrop-filter: blur(10px);
+}
+
+.modal-backdrop.red-tint {
+  background: radial-gradient(circle, rgba(155, 17, 30, 0.5) 0%, rgba(6, 11, 27, 0.94) 80%);
+}
+
+.modal-backdrop.gold-tint {
+  background: radial-gradient(circle, rgba(242, 169, 0, 0.3) 0%, rgba(6, 11, 27, 0.94) 80%);
+}
+
+.modal-window {
+  position: relative;
+  width: 100%;
+  max-width: 620px;
+  background: #001833;
+  border: 2px solid var(--alk-gold-accent);
+  border-radius: 18px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75), var(--shadow-gold-glow);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  animation: modalEnter 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes modalEnter {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.modal-banner {
+  background: linear-gradient(135deg, var(--alk-navy-main), var(--alk-navy-dark));
+  border-bottom: 2px solid var(--alk-gold-accent);
+  padding: 18px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.banner-fail {
+  background: linear-gradient(135deg, #4c0519, #1a0208);
+  border-bottom-color: var(--color-danger);
+}
+
+.banner-win {
+  background: linear-gradient(135deg, #064e3b, #022c22);
+  border-bottom-color: var(--color-patio-green);
+}
+
+.banner-emblem {
+  font-size: 40px;
+  line-height: 1;
+}
+
+.banner-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.banner-sub {
+  font-size: 11px;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  font-weight: 700;
+}
+
+.banner-title {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--color-white);
+  line-height: 1.15;
+}
+
+.banner-tag {
+  font-size: 12px;
+  color: var(--alk-gold-light);
+  font-weight: 600;
+}
+
+.modal-body {
+  padding: 20px 24px;
+  max-height: calc(85vh - 180px);
+  overflow-y: auto;
+}
+
+.modal-storyline {
+  background: rgba(0, 34, 68, 0.6);
+  border-left: 4px solid var(--alk-gold-accent);
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: #e2e8f0;
+  margin-bottom: 18px;
+}
+
+.legend-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.legend-heading {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--alk-gold-light);
+  font-weight: 700;
+}
+
+.legend-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.legend-item {
+  background: rgba(10, 17, 40, 0.7);
+  border: 1px solid rgba(242, 169, 0, 0.2);
+  border-radius: 8px;
+  padding: 8px 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.legend-symbol {
+  font-size: 20px;
+  width: 32px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.legend-desc {
+  font-size: 11.5px;
+  color: #cbd5e1;
+  line-height: 1.3;
+}
+
+.legend-desc code {
+  background: rgba(242, 169, 0, 0.2);
+  color: var(--alk-gold-light);
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-size: 11px;
+}
+
+.modal-footer {
+  padding: 16px 24px 20px;
+  background: rgba(6, 11, 27, 0.95);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.professor-quote-box {
+  background: rgba(230, 57, 70, 0.15);
+  border: 1px solid rgba(230, 57, 70, 0.35);
+  border-radius: 8px;
+  padding: 14px 18px;
+  font-style: italic;
+  font-size: 14px;
+  color: #fecdd3;
+  line-height: 1.4;
+  margin-bottom: 20px;
+}
+
+.victory-celebration {
+  margin-bottom: 18px;
+}
+
+.diploma-icon {
+  font-size: 42px;
+  margin-bottom: 10px;
+  letter-spacing: 6px;
+}
+
+.victory-message {
+  font-size: 14px;
+  color: #e2e8f0;
+  line-height: 1.5;
+}
+
+.results-summary {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.victory-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.result-box {
+  background: rgba(10, 17, 40, 0.7);
+  border: 1px solid rgba(242, 169, 0, 0.25);
+  border-radius: 8px;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.result-label {
+  font-size: 10px;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.result-number {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-white);
+}
+
+.fail-hint {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+/* ==========================================================================
+   6. Responsywność (Mobile-first): #mobile-controls
+   Domyślnie na desktopie (powyżej 768px): ukryte.
+   Poniżej 768px: aktywuj wyświetlanie ekranowych przycisków sterowania!
+   ========================================================================== */
+
+/* Domyślny stan przycisków mobilnych */
+#mobile-controls,
+.touch-controls-container {
+  display: none; /* Ukryte domyślnie na ekranach desktopowych */
+  width: 100%;
+  max-width: 800px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  margin-top: 10px;
+  background: rgba(0, 34, 68, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 2px solid var(--alk-gold-accent);
+  border-radius: 16px;
+  box-shadow: var(--shadow-hud-glass), var(--shadow-gold-glow);
+}
+
+/* Układ wirtualnego D-Pada */
+.dpad-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.dpad-horizontal-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.dpad-center-cap {
+  width: 40px;
+  height: 40px;
+  background: var(--alk-navy-dark);
+  border-radius: 8px;
+  border: 1px solid rgba(242, 169, 0, 0.2);
+}
+
+.dpad-btn {
+  width: 52px;
+  height: 52px;
+  background: linear-gradient(135deg, var(--alk-blue-secondary), var(--alk-navy-main));
+  border: 2px solid var(--alk-gold-accent);
+  border-radius: 12px;
+  color: var(--color-white);
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+  touch-action: manipulation;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  transition: transform 0.08s ease, background 0.1s ease;
+}
+
+.dpad-btn:active, 
+.dpad-btn.touch-active {
+  background: var(--alk-gold-accent);
+  color: var(--alk-navy-dark);
+  transform: scale(0.92);
+}
+
+/* Wirtualny przycisk Sprintu */
+.touch-actions-box {
+  display: flex;
+  align-items: center;
+}
+
+.touch-action-btn {
+  min-width: 96px;
+  height: 76px;
+  background: linear-gradient(135deg, var(--alk-gold-accent), var(--alk-gold-light));
+  border: 2px solid #ffffff;
+  border-radius: 16px;
+  color: var(--alk-navy-dark);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  cursor: pointer;
+  box-shadow: var(--shadow-gold-strong);
+  user-select: none;
+  touch-action: manipulation;
+  transition: transform 0.08s ease;
+}
+
+.touch-action-btn:active, 
+.touch-action-btn.touch-active {
+  transform: scale(0.92);
+  filter: brightness(1.15);
+}
+
+.touch-action-btn .btn-icon {
+  font-size: 24px;
+  line-height: 1;
+}
+
+.touch-action-btn .btn-label {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+/* W widokach poniżej 768px (@media) aktywuj wyświetlanie ekranowych przycisków sterowania (#mobile-controls) */
+@media (max-width: 768px) {
+  #mobile-controls,
+  .touch-controls-container {
+    display: flex !important;
+  }
+
+  #game-app {
+    padding: 8px;
+  }
+
+  .hud-container {
+    flex-wrap: wrap;
+    padding: 10px 14px;
+    gap: 8px;
+  }
+
+  .hud-brand {
+    order: 1;
+  }
+
+  .hud-actions {
+    order: 2;
+  }
+
+  .hud-stats-group {
+    order: 3;
+    width: 100%;
+    justify-content: space-between;
+    gap: 6px;
+  }
+
+  .hud-card {
+    min-width: unset;
+    flex: 1;
+    padding: 5px 8px;
+    gap: 6px;
+  }
+
+  .hud-card-icon {
+    font-size: 16px;
+  }
+
+  .status-location {
+    font-size: 11px;
+  }
+
+  .speech-bubble {
+    padding: 8px 12px;
+    gap: 10px;
+  }
+
+  .bubble-quote {
+    font-size: 12px;
+  }
+
+  .legend-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Klasa pomocnicza do ukrywania */
+.hidden {
+  display: none !important;
+}
