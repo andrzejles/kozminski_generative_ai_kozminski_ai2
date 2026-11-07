@@ -217,6 +217,27 @@ const SoundSystem = {
         break;
       }
 
+      // 7. 'artillery': potężny wystrzał i wybuch artylerii odrzucający wykładowcę
+      case 'artillery': {
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        const duration = 0.55;
+
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(480, now);
+        osc.frequency.exponentialRampToValueAtTime(32, now + duration);
+
+        gain.gain.setValueAtTime(0.35, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+
+        osc.start(now);
+        osc.stop(now + duration);
+        break;
+      }
+
       default:
         console.warn(`Nieznany typ dźwięku: "${type}"`);
     }

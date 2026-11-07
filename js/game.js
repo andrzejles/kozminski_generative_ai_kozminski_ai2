@@ -65,6 +65,12 @@
   const touchLeft = document.getElementById('touch-left');
   const touchRight = document.getElementById('touch-right');
   const touchSprint = document.getElementById('touch-sprint');
+  const touchArtillery = document.getElementById('touch-artillery');
+
+  // Przycisk Artyleria w HUD
+  const btnArtillery = document.getElementById('btn-artillery');
+  const artilleryBadge = document.getElementById('artillery-badge');
+  const ARTILLERY_COOLDOWN_TIME = 5.0; // 5 sekund cooldownu między wystrzałami
 
   // --- Teksty akademickie surowego Egzaminatora ALK ---
   const PROFESSOR_QUOTES = [
@@ -137,6 +143,7 @@
     coffeeTimer: 0,     // 5s turbo szybkości
     freezeTimer: 0,     // 3.5s paraliżu Gemini AI
     hasShield: false,   // Legitymacja ALK absorbująca 1 uderzenie
+    artilleryCooldown: 0, // Odliczanie do kolejnego wystrzału artylerii
     keys: {
       up: false,
       down: false,
@@ -343,6 +350,67 @@
     }, 450);
   }
 
+  // 4 kąty kampusu ALK (wewnątrz pomieszczeń: Aula A, Biblioteka, Lab Komputerowy, Dziekanat)
+  const CAMPUS_CORNERS = [
+    { name: 'Aula A (Północny Zachód)', x: 65, y: 65 },
+    { name: 'Biblioteka (Północny Wschód)', x: 735, y: 65 },
+    { name: 'Lab Komputerowy (Południowy Zachód)', x: 65, y: 475 },
+    { name: 'Dziekanat (Południowy Wschód)', x: 735, y: 475 }
+  ];
+
+  /**
+   * ARTYLERIA: Wystrzeliwuje wykładowcę do kąta kampusu
+   */
+  function fireArtillery() {
+    if (state.gameState !== 'PLAYING') return;
+    if (state.artilleryCooldown > 0) return;
+
+    window.SoundSystem.init();
+
+    // Wybór kąta kampusu, który znajduje się najdalej od studenta (maksymalny ratunek)
+    const corners = [...CAMPUS_CORNERS].sort((a, b) => {
+      const distA = Math.hypot(a.x - player.x, a.y - player.y);
+      const distB = Math.hypot(b.x - player.x, b.y - player.y);
+      return distB - distA; // malejąco - najdalszy kąt pierwszy
+    });
+
+    const targetCorner = corners[0];
+
+    // Potężna eksplozja w dotychczasowym miejscu wykładowcy
+    spawnParticles(professor.x, professor.y, '#e63946', 32, 5.5);
+    spawnParticles(professor.x, professor.y, '#f2a900', 25, 4.0);
+    spawnParticles(professor.x, professor.y, '#ffffff', 20, 3.0);
+
+    // Przeniesienie wykładowcy do kąta kampusu
+    professor.x = targetCorner.x;
+    professor.y = targetCorner.y;
+
+    // Eksplozja / dym po uderzeniu w kącie docelowym
+    spawnParticles(professor.x, professor.y, '#38bdf8', 28, 4.5);
+    spawnParticles(professor.x, professor.y, '#ffc740', 22, 3.5);
+
+    // Dźwięk wybuchu artylerii
+    window.SoundSystem.play('artillery');
+
+    // Chwilowy paraliż profesora na 2 sekundy po odrzuceniu
+    state.freezeTimer = 2.0;
+
+    // Uruchomienie cooldownu
+    state.artilleryCooldown = ARTILLERY_COOLDOWN_TIME;
+
+    // Zszokowane wypowiedzi profesora
+    const artilleryQuotes = [
+      '„CO TO ZA OSTRZAŁ?! Odrzuciło mnie aż do narożnika!”',
+      '„Kto zezwolił na artylerię na terenie kampusu Koźmińskiego?!”',
+      '„Moje arkusze ocen! Wszystko fruwa po kątach!”',
+      '„To naruszenie regulaminu sesji! Natychmiast wracam!”',
+      '„Panie Kolego, to nie jest zaliczenie ze strategii wojskowej!”'
+    ];
+    triggerProfessorQuote(artilleryQuotes[Math.floor(Math.random() * artilleryQuotes.length)]);
+
+    updateHUD();
+  }
+
   /**
    * Detekcja strefy kampusu, w której znajduje się student
    */
@@ -442,6 +510,18 @@
       dangerStatusEl.textContent = state.hasShield ? 'Status: Bezpiecznie (Tarcza aktywna)' : 'Status: Bezpiecznie';
       dangerStatusEl.className = 'status-alert safe';
     }
+
+    // Aktualizacja stanu przycisku ARTYLERIA
+    if (state.artilleryCooldown > 0) {
+      const cdSec = Math.ceil(state.artilleryCooldown);
+      if (artilleryBadge) artilleryBadge.textContent = cdSec + 's';
+      if (btnArtillery) btnArtillery.classList.add('artillery-cooling');
+      if (touchArtillery) touchArtillery.classList.add('artillery-cooling');
+    } else {
+      if (artilleryBadge) artilleryBadge.textContent = 'GOTOWA';
+      if (btnArtillery) btnArtillery.classList.remove('artillery-cooling');
+      if (touchArtillery) touchArtillery.classList.remove('artillery-cooling');
+    }
   }
 
   /**
@@ -507,6 +587,7 @@
     state.coffeeTimer = 0;
     state.freezeTimer = 0;
     state.hasShield = false;
+    state.artilleryCooldown = 0;
     state.lastQuoteChange = Date.now();
     state.particles = [];
     state.confetti = [];
@@ -547,7 +628,7 @@
     }
   }
 
-  // --- Obsługa klawiatury (WASD / Strzałki / Spacja / Shift) ---
+  // --- Obsługa klawiatury (WASD / Strzałki / Spacja / Shift / Klawisz E dla Artylerii) ---
   window.addEventListener('keydown', (e) => {
     window.SoundSystem.init();
 
@@ -557,6 +638,12 @@
 
     if (e.key === 'p' || e.key === 'P' || e.key === 'Escape') {
       togglePause();
+      return;
+    }
+
+    // Klawisz E lub R: Wystrzelenie Artylerii (odrzucenie wykładowcy do kąta)
+    if (e.key === 'e' || e.key === 'E' || e.key === 'r' || e.key === 'R') {
+      fireArtillery();
       return;
     }
 
@@ -617,6 +704,18 @@
   });
   btnPause.addEventListener('click', togglePause);
 
+  // Obsługa przycisków Artylerii (HUD i ekran dotykowy)
+  if (btnArtillery) {
+    btnArtillery.addEventListener('click', fireArtillery);
+  }
+  if (touchArtillery) {
+    touchArtillery.addEventListener('click', fireArtillery);
+    touchArtillery.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      fireArtillery();
+    }, { passive: false });
+  }
+
   btnSound.addEventListener('click', () => {
     const muted = window.SoundSystem.toggleMute();
     soundIcon.textContent = muted ? '🔇' : '🔊';
@@ -638,10 +737,11 @@
 
     state.elapsedTime = Date.now() - state.startTime;
 
-    // Odliczanie czasu power-upów
+    // Odliczanie czasu power-upów i cooldownu artylerii
     if (state.coffeeTimer > 0) state.coffeeTimer -= dt;
     if (state.freezeTimer > 0) state.freezeTimer -= dt;
     if (state.quoteDisplayTime > 0) state.quoteDisplayTime -= dt;
+    if (state.artilleryCooldown > 0) state.artilleryCooldown -= dt;
 
     // 2. Gracz (Student): Ruch wektorowy i sprint ze staminą
     const isMoving = state.keys.up || state.keys.down || state.keys.left || state.keys.right;

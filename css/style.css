@@ -348,6 +348,85 @@ html, body {
   transform: translateY(1px) scale(0.96);
 }
 
+/* Przycisk ARTYLERIA w HUD */
+.btn-artillery {
+  background: linear-gradient(135deg, #e63946 0%, #b91c1c 100%);
+  border: 2px solid var(--alk-gold-accent);
+  color: var(--color-white);
+  padding: 6px 14px;
+  height: 38px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 13px;
+  letter-spacing: 0.6px;
+  box-shadow: 0 0 14px rgba(230, 57, 70, 0.45);
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.btn-artillery:hover {
+  transform: translateY(-2px) scale(1.05);
+  background: linear-gradient(135deg, #ff4d6d 0%, #dc2626 100%);
+  box-shadow: 0 0 20px rgba(230, 57, 70, 0.7), var(--shadow-gold-glow);
+  border-color: var(--alk-gold-light);
+}
+
+.btn-artillery:active {
+  transform: translateY(1px) scale(0.96);
+}
+
+.artillery-icon {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.artillery-badge {
+  background: rgba(0, 0, 0, 0.45);
+  color: #ffc740;
+  font-size: 9.5px;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+  border: 1px solid rgba(255, 199, 64, 0.3);
+}
+
+/* Stan cooldownu dla przycisku artylerii */
+.btn-artillery.artillery-cooling {
+  opacity: 0.55;
+  filter: grayscale(0.5);
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.btn-artillery.artillery-cooling .artillery-badge {
+  color: #ff8592;
+  border-color: #ff4d6d;
+}
+
+/* Wersja dotykowa dla telefonów (#mobile-controls) */
+.btn-artillery-touch {
+  background: linear-gradient(135deg, #e63946, #9b111e) !important;
+  border: 2px solid var(--alk-gold-accent) !important;
+  box-shadow: 0 4px 14px rgba(230, 57, 70, 0.5) !important;
+}
+
+.btn-artillery-touch.touch-active {
+  background: #ff4d6d !important;
+  transform: scale(0.92);
+}
+
+.btn-artillery-touch.artillery-cooling {
+  opacity: 0.45;
+  filter: grayscale(0.7);
+  pointer-events: none;
+}
+
 /* ==========================================================================
    3. Obszar gry: Canvas + Komiksowy dymek nad profesorem
    ========================================================================== */

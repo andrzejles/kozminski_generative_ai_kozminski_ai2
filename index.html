@@ -77,8 +77,15 @@
           </div>
         </div>
 
-        <!-- Przyciski pomocnicze HUD (Dźwięk / Pauza / Zasady) -->
+        <!-- Przyciski pomocnicze HUD (Dźwięk / Pauza / Zasady + ARTYLERIA) -->
         <div class="hud-actions">
+          <!-- Przycisk Artylerii ułatwiający ucieczkę -->
+          <button id="btn-artillery" class="btn-artillery" type="button" aria-label="Wystrzel artylerię" title="ARTYLERIA [Klawisz E]: Wystrzel wykładowcę w kąt kampusu!">
+            <span class="artillery-icon">🎯</span>
+            <span class="artillery-title">ARTYLERIA [E]</span>
+            <span id="artillery-badge" class="artillery-badge">GOTOWA</span>
+          </button>
+
           <button id="btn-sound" class="hud-btn" type="button" aria-label="Włącz/Wyłącz dźwięk" title="Wycisz/Włącz dźwięk">
             <span id="sound-icon">🔊</span>
           </button>
@@ -146,8 +153,12 @@
           </button>
         </div>
 
-        <!-- Wirtualny przycisk sprintu -->
+        <!-- Wirtualne przyciski akcji (Artyleria + Sprint) -->
         <div class="touch-actions-box">
+          <button id="touch-artillery" class="touch-action-btn btn-artillery-touch" type="button" aria-label="Wystrzel artylerię">
+            <span class="btn-icon">🎯</span>
+            <span class="btn-label">ARTYLERIA</span>
+          </button>
           <button id="touch-sprint" class="touch-action-btn btn-sprint" type="button" aria-label="Sprint">
             <span class="btn-icon">⚡</span>
             <span class="btn-label">SPRINT</span>
@@ -218,6 +229,12 @@
                   <div class="legend-symbol icon-id">🪪</div>
                   <div class="legend-desc">
                     <strong>Legitymacja ALK:</strong> Tarcza ochronna absorbująca 1 uderzenie egzaminatora.
+                  </div>
+                </div>
+                <div class="legend-item legend-artillery-card">
+                  <div class="legend-symbol icon-artillery">🎯</div>
+                  <div class="legend-desc">
+                    <strong>Artyleria [E]:</strong> Zbyt trudno? Kliknij przycisk, by natychmiast wystrzelić wykładowcę w odległy kąt!
                   </div>
                 </div>
               </div>
